@@ -5,9 +5,19 @@ import path from "path";
 
 const BEEHIIV_API_BASE = "https://api.beehiiv.com/v2";
 
+// Ensure this runs server-side and isn't statically optimized
+export const dynamic = "force-dynamic";
+
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    // --- 1) Parse body safely ---
+    let body: any = null;
+    try {
+      body = await req.json();
+    } catch {
+      body = null;
+    }
+
     const email = typeof body?.email === "string" ? body.email.trim() : "";
 
     if (!email) {
@@ -17,7 +27,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Very light validation – you can swap for a stricter regex or library later
+    // --- 2) Very light email validation ---
     const basicEmailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!basicEmailPattern.test(email)) {
       return NextResponse.json(
@@ -28,17 +38,19 @@ export async function POST(req: NextRequest) {
 
     const timestamp = new Date().toISOString();
 
-    // ---------- 1) Append to local CSV backup ----------
+    // --- 3) Try to append to local CSV (but don't fail the request if this breaks) ---
     const line = `"${timestamp}","${email.replace(/"/g, '""')}"\n`;
     const filePath = path.join(process.cwd(), "data", "waitlist.csv");
 
-    // Ensure folder exists
-    await fs.mkdir(path.dirname(filePath), { recursive: true });
+    try {
+      await fs.mkdir(path.dirname(filePath), { recursive: true });
+      await fs.appendFile(filePath, line, "utf8");
+    } catch (csvError) {
+      console.error("Waitlist CSV write error:", csvError);
+      // We *do not* throw here – the user still gets a success response.
+    }
 
-    // Append new record
-    await fs.appendFile(filePath, line, "utf8");
-
-    // ---------- 2) Send to Beehiiv (primary list) ----------
+    // --- 4) Try to send to Beehiiv (also non-fatal for the user) ---
     const apiKey = process.env.BEEHIIV_API_KEY;
     const publicationId = process.env.BEEHIIV_PUBLICATION_ID;
 
@@ -75,17 +87,19 @@ export async function POST(req: NextRequest) {
             res.statusText,
             text
           );
-          // We still return ok:true so the user sees success and the CSV has them.
+          // Still don’t fail the user-facing response.
         }
       } catch (beeErr) {
         console.error("Error calling Beehiiv API:", beeErr);
-        // Again, don't surface as 500 – local CSV is already written.
+        // Also non-fatal.
       }
     }
 
+    // --- 5) Always return success to the client if we got this far ---
     return NextResponse.json({ ok: true });
   } catch (error) {
-    console.error("Waitlist POST error:", error);
+    // Only truly unexpected, top-level failures end up here
+    console.error("Waitlist POST fatal error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
