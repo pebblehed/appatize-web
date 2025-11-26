@@ -161,14 +161,14 @@ export default function HomePage() {
                   <ul className="mt-2 space-y-1 text-xs text-neutral-200">
                     <li>• EN → ES · DE · FR · PT</li>
                     <li>• Tone locked for each market</li>
-                    <li>• Creator-ready outputs</li>
+                    <li>• Creator ready outputs</li>
                   </ul>
                 </div>
 
                 <div className="md:col-span-2 rounded-2xl border border-neutral-800 bg-neutral-900/60 p-3">
                   <div className="mb-1 flex items-center justify-between text-[11px] text-neutral-400">
                     <span>Ops Hub</span>
-                    <span>Trend-to-publish: 42 minutes</span>
+                    <span>Trend to publish: 42 minutes</span>
                   </div>
                   <div className="flex flex-col gap-1.5 text-[11px] text-neutral-300 sm:flex-row sm:flex-wrap">
                     <div className="flex items-center gap-2">
@@ -190,7 +190,7 @@ export default function HomePage() {
 
             <p className="mt-3 text-center text-xs text-neutral-500">
               One workspace where signals, scripts, translations, and approvals
-              stay in sync — without 12 different tools.
+              stay in sync without 12 different tools.
             </p>
           </div>
         </section>
@@ -222,7 +222,7 @@ export default function HomePage() {
               </h3>
               <p className="mt-2 text-sm text-neutral-400">
                 Teams switch between 6–12 platforms. Approvals, scripts,
-                localizations, briefs—the creative pipeline is scattered.
+                localizations, briefs the creative pipeline is scattered.
               </p>
             </div>
 
@@ -247,7 +247,7 @@ export default function HomePage() {
                 Every market sounds different.
               </h3>
               <p className="mt-2 text-sm text-neutral-400">
-                Local teams rewrite, creators reinterpret, agencies re-translate.
+                Local teams rewrite, creators reinterpret, agencies re translate.
                 Brand voice becomes fragmented and diluted.
               </p>
             </div>
@@ -260,7 +260,7 @@ export default function HomePage() {
                 Hours of waiting. Zero momentum.
               </h3>
               <p className="mt-2 text-sm text-neutral-400">
-                Feedback loops, approvals, rewrites, translations—it all stacks
+                Feedback loops, approvals, rewrites, translations it all stacks
                 into unavoidable delays that kill cultural relevance.
               </p>
             </div>
@@ -274,7 +274,7 @@ export default function HomePage() {
               </h3>
               <p className="mt-2 text-sm text-neutral-400">
                 They don’t receive the signals, timing, angles, or tone nuances
-                behind the campaign—leading to off-brief content.
+                behind the campaign leading to off brief content.
               </p>
             </div>
 
@@ -333,7 +333,7 @@ export default function HomePage() {
                 <ul className="mt-3 space-y-1.5 text-xs text-neutral-400">
                   <li>• Trend windows and cultural themes identified in real time</li>
                   <li>• Context, audience, and platform mapped to each signal</li>
-                  <li>• Brand-safe filters so not every spike becomes a brief</li>
+                  <li>• Brand safe filters so not every spike becomes a brief</li>
                 </ul>
               </article>
 
@@ -348,14 +348,14 @@ export default function HomePage() {
                   </span>
                 </div>
                 <h3 className="text-base font-semibold text-neutral-100 sm:text-lg">
-                  Turn signals into creator-ready scripts.
+                  Turn signals into creator ready scripts.
                 </h3>
                 <p className="mt-2 text-xs text-neutral-400 sm:text-sm">
                   Multi-variant hooks, angles, and scripts formatted for
                   TikTok, Reels, Shorts, X, and more.
                 </p>
                 <ul className="mt-3 space-y-1.5 text-xs text-neutral-400">
-                  <li>• Platform-specific scripts and hooks from one source brief</li>
+                  <li>• Platform specific scripts and hooks from one source brief</li>
                   <li>• Brand tone encoded so creators stay on-voice</li>
                   <li>• Multiple variants to test without rewriting from scratch</li>
                 </ul>
@@ -376,12 +376,12 @@ export default function HomePage() {
                 </h3>
                 <p className="mt-2 text-xs text-neutral-400 sm:text-sm">
                   Scripts are translated and culturally adapted for each market,
-                  not just word-swapped.
+                  not just word swapped.
                 </p>
                 <ul className="mt-3 space-y-1.5 text-xs text-neutral-400">
                   <li>• EN → ES, DE, FR, PT and beyond with market nuance</li>
                   <li>• Guardrails so core message and tone stay consistent</li>
-                  <li>• Creator-ready outputs per language, not raw translations</li>
+                  <li>• Creator ready outputs per language, not raw translations</li>
                 </ul>
               </article>
 
@@ -399,7 +399,7 @@ export default function HomePage() {
                   Approve, align, and go live.
                 </h3>
                 <p className="mt-2 text-xs text-neutral-400 sm:text-sm">
-                  One place to align brand, legal, local markets, and creators —
+                  One place to align brand, legal, local markets, and creators
                   then push into your existing tools.
                 </p>
                 <ul className="mt-3 space-y-1.5 text-xs text-neutral-400">
@@ -411,8 +411,8 @@ export default function HomePage() {
             </div>
 
             <p className="mt-4 text-center text-xs text-neutral-500">
-              From signal to publish, Appatize keeps every layer — brand,
-              creators, markets, and ops — moving in one direction.
+              From signal to publish, Appatize keeps every layer brand,
+              creators, markets, and ops moving in one direction.
             </p>
           </div>
         </section>
@@ -428,7 +428,7 @@ export default function HomePage() {
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-sm text-neutral-400 sm:text-base">
               Appatize sits where brands, creators, and agencies actually work
-              together — one shared cultural workspace instead of three separate
+              together one shared cultural workspace instead of three separate
               worlds.
             </p>
           </div>
@@ -443,7 +443,7 @@ export default function HomePage() {
               </h3>
               <p className="mt-2 text-sm text-neutral-400">
                 Give your teams one place to turn cultural signals into
-                on-brand, on-time, multi-market creative — without losing
+                on brand, on time, multi-market creative without losing
                 control of voice or risk.
               </p>
               <ul className="mt-3 space-y-1.5 text-xs text-neutral-400">
@@ -461,7 +461,7 @@ export default function HomePage() {
                 Less guesswork. More green lights.
               </h3>
               <p className="mt-2 text-sm text-neutral-400">
-                Get clear angles, timing, and voice — plus platform-ready scripts
+                Get clear angles, timing, and voice plus platform-ready scripts
                 you can adapt in your own style without endless rewrites.
               </p>
               <ul className="mt-3 space-y-1.5 text-xs text-neutral-400">
@@ -480,7 +480,7 @@ export default function HomePage() {
               </h3>
               <p className="mt-2 text-sm text-neutral-400">
                 Align strategy, creative, and localization in one cultural layer
-                — so every client launch feels intentional, not improvised.
+                so every client launch feels intentional, not improvised.
               </p>
               <ul className="mt-3 space-y-1.5 text-xs text-neutral-400">
                 <li>• Standardize how you go from trend to treatment</li>
@@ -512,7 +512,7 @@ export default function HomePage() {
             <div className="rounded-2xl border border-neutral-900 bg-neutral-950/70 px-6 py-6 backdrop-blur">
               <div className="mb-3 text-xl text-fuchsia-300">◆</div>
               <h3 className="text-base font-semibold text-neutral-100">
-                Enterprise-grade foundation
+                Enterprise grade foundation
               </h3>
               <p className="mt-2 text-sm text-neutral-400">
                 From permissions to auditability, Appatize is designed to sit
@@ -545,7 +545,7 @@ export default function HomePage() {
               </h3>
               <p className="mt-2 text-sm text-neutral-400">
                 Multi-market workflows, tone protection, and localization-aware
-                scripting are built into the core — not bolted on as an
+                scripting are built into the core not bolted on as an
                 afterthought.
               </p>
             </div>
@@ -558,7 +558,7 @@ export default function HomePage() {
               </h3>
               <p className="mt-2 text-sm text-neutral-400">
                 No more scattered docs, DMs, and screenshots. Signals, briefs,
-                scripts, and approvals live in one place — so everyone sees the
+                scripts, and approvals live in one place so everyone sees the
                 same reality and ships with confidence.
               </p>
             </div>
@@ -575,7 +575,7 @@ export default function HomePage() {
             <p className="mx-auto mt-4 max-w-2xl text-sm text-neutral-400 sm:text-base">
               Brands win or lose in hours, not weeks.  
               Appatize brings every signal, script, voice, and approval into one
-              cultural pipeline — so your team never falls behind the culture again.
+              cultural pipeline so your team never falls behind the culture again.
             </p>
 
             <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
