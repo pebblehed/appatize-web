@@ -3,21 +3,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
 
-const BEEHIIV_API_BASE = "https://api.beehiiv.com/v2";
-
-// Ensure this runs server-side and isn't statically optimized
-export const dynamic = "force-dynamic";
+const BEEHIIV_API_KEY = process.env.BEEHIIV_API_KEY;
+const BEEHIIV_PUBLICATION_ID = process.env.BEEHIIV_PUBLICATION_ID;
 
 export async function POST(req: NextRequest) {
   try {
-    // --- 1) Parse body safely ---
-    let body: any = null;
-    try {
-      body = await req.json();
-    } catch {
-      body = null;
-    }
-
+    const body = await req.json();
     const email = typeof body?.email === "string" ? body.email.trim() : "";
 
     if (!email) {
@@ -27,7 +18,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // --- 2) Very light email validation ---
+    // Very light email validation
     const basicEmailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!basicEmailPattern.test(email)) {
       return NextResponse.json(
@@ -38,68 +29,75 @@ export async function POST(req: NextRequest) {
 
     const timestamp = new Date().toISOString();
 
-    // --- 3) Try to append to local CSV (but don't fail the request if this breaks) ---
+    // --- Debug: make sure env vars are present ---
+    console.log("[waitlist] Incoming email:", email);
+    console.log("[waitlist] Beehiiv key present? ", !!BEEHIIV_API_KEY);
+    console.log("[waitlist] Beehiiv publication present? ", !!BEEHIIV_PUBLICATION_ID);
+
+    // --- 1) Try Beehiiv first (if configured) ---
+    let beehiivStatus:
+      | "created"
+      | "exists"
+      | "skipped_env_missing"
+      | "error" = "skipped_env_missing";
+
+    if (BEEHIIV_API_KEY && BEEHIIV_PUBLICATION_ID) {
+      try {
+        const url = `https://api.beehiiv.com/v2/publications/${BEEHIIV_PUBLICATION_ID}/subscriptions`;
+
+        const res = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${BEEHIIV_API_KEY}`,
+          },
+          body: JSON.stringify({
+            email,
+            reactivate_existing: true,
+            send_welcome_email: true,
+            utm_source: "appatize_waitlist",
+          }),
+        });
+
+        console.log("[waitlist] Beehiiv status code:", res.status);
+
+        if (res.status === 201 || res.status === 200) {
+          beehiivStatus = "created";
+        } else if (res.status === 409) {
+          // Already subscribed / conflict
+          beehiivStatus = "exists";
+          const msg = await res.text().catch(() => "");
+          console.log("[waitlist] Beehiiv 409 (already exists):", msg);
+        } else {
+          beehiivStatus = "error";
+          const msg = await res.text().catch(() => "");
+          console.error("[waitlist] Beehiiv error:", res.status, msg);
+        }
+      } catch (err) {
+        beehiivStatus = "error";
+        console.error("[waitlist] Beehiiv request failed:", err);
+      }
+    } else {
+      console.warn(
+        "[waitlist] Beehiiv env vars missing – skipping Beehiiv subscription."
+      );
+    }
+
+    // --- 2) Always log to local CSV as backup ---
     const line = `"${timestamp}","${email.replace(/"/g, '""')}"\n`;
     const filePath = path.join(process.cwd(), "data", "waitlist.csv");
 
-    try {
-      await fs.mkdir(path.dirname(filePath), { recursive: true });
-      await fs.appendFile(filePath, line, "utf8");
-    } catch (csvError) {
-      console.error("Waitlist CSV write error:", csvError);
-      // We *do not* throw here – the user still gets a success response.
-    }
+    await fs.mkdir(path.dirname(filePath), { recursive: true });
+    await fs.appendFile(filePath, line, "utf8");
 
-    // --- 4) Try to send to Beehiiv (also non-fatal for the user) ---
-    const apiKey = process.env.BEEHIIV_API_KEY;
-    const publicationId = process.env.BEEHIIV_PUBLICATION_ID;
+    console.log("[waitlist] CSV append OK at", filePath);
 
-    if (!apiKey || !publicationId) {
-      console.warn(
-        "Beehiiv env vars missing – skipping remote subscription. " +
-          "Set BEEHIIV_API_KEY and BEEHIIV_PUBLICATION_ID."
-      );
-    } else {
-      try {
-        const res = await fetch(
-          `${BEEHIIV_API_BASE}/publications/${publicationId}/subscriptions`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${apiKey}`,
-            },
-            body: JSON.stringify({
-              email,
-              reactivate_existing: true,
-              send_welcome_email: true,
-              utm_source: "appatize-waitlist",
-              utm_medium: "landing-page",
-            }),
-          }
-        );
-
-        if (!res.ok) {
-          const text = await res.text();
-          console.error(
-            "Beehiiv subscription failed:",
-            res.status,
-            res.statusText,
-            text
-          );
-          // Still don’t fail the user-facing response.
-        }
-      } catch (beeErr) {
-        console.error("Error calling Beehiiv API:", beeErr);
-        // Also non-fatal.
-      }
-    }
-
-    // --- 5) Always return success to the client if we got this far ---
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({
+      ok: true,
+      beehiivStatus,
+    });
   } catch (error) {
-    // Only truly unexpected, top-level failures end up here
-    console.error("Waitlist POST fatal error:", error);
+    console.error("Waitlist POST error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
